@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+/* Claude-like styling */
+.claude-bg {
+  background-color: #fafafa;
+}
+
+.claude-sidebar {
+  background-color: #f8f9fa;
+  border-right: 1px solid #e5e7eb;
+}
+
+.claude-message-user {
+  background-color: #f3f4f6;
+}
+
+.claude-message-assistant {
+  background-color: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  .claude-bg {
+    background-color: #1a1a1a;
+  }
+  
+  .claude-sidebar {
+    background-color: #2d2d2d;
+    border-right: 1px solid #404040;
+  }
+  
+  .claude-message-user {
+    background-color: #374151;
+  }
+  
+  .claude-message-assistant {
+    background-color: #1f2937;
+  }
+}

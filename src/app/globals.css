@@ -2,63 +2,176 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
+/* Mobile-First Base Styles */
+@layer base {
+  html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+  body {
+    @apply bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior: none;
+  }
+
+  /* Prevent zoom on input focus on iOS */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  textarea {
+    font-size: 16px !important;
+  }
+
+  /* Touch selection improvements */
+  * {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  input, textarea {
+    -webkit-user-select: auto;
+    -khtml-user-select: auto;
+    -moz-user-select: auto;
+    -ms-user-select: auto;
+    user-select: auto;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+/* Mobile-Optimized Component Styles */
+@layer components {
+  /* Claude-like styling */
+  .claude-bg {
+    @apply bg-white dark:bg-gray-900;
+  }
+
+  .claude-sidebar {
+    @apply bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700;
+  }
+
+  /* Touch-friendly interactive elements */
+  .touch-manipulation {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Mobile-first button styles */
+  .mobile-button {
+    @apply min-h-[44px] px-4 py-3 rounded-xl font-medium transition-all duration-200 touch-manipulation;
+    @apply active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+
+  .mobile-button-primary {
+    @apply mobile-button bg-blue-600 text-white;
+    @apply hover:bg-blue-700 focus:ring-blue-500;
+    @apply active:bg-blue-800;
+  }
+
+  .mobile-button-secondary {
+    @apply mobile-button bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100;
+    @apply hover:bg-gray-300 dark:hover:bg-gray-600 focus:ring-gray-500;
+  }
+
+  /* Scroll behavior */
+  .mobile-scroll {
+    @apply overflow-y-auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(156 163 175) transparent;
+  }
+
+  .mobile-scroll::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .mobile-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .mobile-scroll::-webkit-scrollbar-thumb {
+    background-color: rgb(156 163 175);
+    border-radius: 3px;
+  }
 }
 
-/* Claude-like styling */
-.claude-bg {
-  background-color: #fafafa;
+/* Mobile-specific utilities */
+@layer utilities {
+  /* Text selection utilities */
+  .select-text {
+    -webkit-user-select: text;
+    -khtml-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+  }
+
+  /* Mobile-only utilities */
+  @media (max-width: 767px) {
+    .mobile-only {
+      display: block;
+    }
+
+    .desktop-only {
+      display: none;
+    }
+
+    .mobile-full-height {
+      height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    }
+
+    .mobile-padding-safe {
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+    }
+  }
+
+  /* Desktop-only utilities */
+  @media (min-width: 768px) {
+    .mobile-only {
+      display: none;
+    }
+
+    .desktop-only {
+      display: block;
+    }
+  }
 }
 
-.claude-sidebar {
-  background-color: #f8f9fa;
-  border-right: 1px solid #e5e7eb;
+/* Mobile animations */
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
-.claude-message-user {
-  background-color: #f3f4f6;
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-.claude-message-assistant {
-  background-color: #ffffff;
-}
-
+/* Dark mode optimizations for mobile */
 @media (prefers-color-scheme: dark) {
   .claude-bg {
-    background-color: #1a1a1a;
+    background-color: #0f172a;
   }
   
   .claude-sidebar {
-    background-color: #2d2d2d;
-    border-right: 1px solid #404040;
-  }
-  
-  .claude-message-user {
-    background-color: #374151;
-  }
-  
-  .claude-message-assistant {
-    background-color: #1f2937;
+    background-color: #1e293b;
+    border-color: #334155;
   }
 }

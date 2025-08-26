@@ -4,7 +4,6 @@ import { useState } from 'react'
 import Sidebar from '@/components/Sidebar'
 import ChatArea from '@/components/ChatArea'
 import ModeSelection from '@/components/ModeSelection'
-import MobileHeader from '@/components/MobileHeader'
 import { Message, Conversation, ConversationMode, ConversationData } from '@/types'
 import { getDefaultCurriculumStructure, getDefaultTikTokShopStructure, getDefaultGeneralChatStructure, getInitialMessage, getConversationTitle } from '@/lib/unifiedConversationEngine'
 
@@ -12,7 +11,6 @@ export default function Home() {
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [activeConversation, setActiveConversation] = useState<string | null>(null)
   const [showModeSelection, setShowModeSelection] = useState(false)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
   
   const getCurrentConversation = () => {
     if (!activeConversation) return null
@@ -48,14 +46,14 @@ export default function Home() {
     setConversations(prev => [newConversation, ...prev])
     setActiveConversation(newConversation.id)
     setShowModeSelection(false)
-    setSidebarOpen(false) // Close sidebar on mobile after selection
   }
 
   const updateConversation = (conversationId: string, updates: Partial<Conversation>) => {
-    setConversations(prev =>
+    setConversations(prev => 
       prev.map(c => {
         if (c.id === conversationId) {
           const updated = { ...c, ...updates, updatedAt: new Date() }
+          // Update title based on data
           if (updates.data) {
             updated.title = getConversationTitle(c.mode, updates.data)
           }
@@ -83,53 +81,22 @@ export default function Home() {
 
   const showNewConversationModal = () => {
     setShowModeSelection(true)
-    setSidebarOpen(false) // Close sidebar when opening mode selection
-  }
-
-  const handleConversationSelect = (id: string) => {
-    setActiveConversation(id)
-    setSidebarOpen(false) // Close sidebar on mobile after selection
   }
 
   return (
-    <div className="flex h-screen relative claude-bg">
-      {/* Mobile Header - Only visible on mobile */}
-      <div className="md:hidden">
-        <MobileHeader 
-          conversation={getCurrentConversation()}
-          onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
-          onNewConversation={showNewConversationModal}
-        />
-      </div>
-
-      {/* Sidebar Overlay for Mobile */}
-      {sidebarOpen && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-
-      {/* Sidebar */}
-      <div className={"fixed md:relative z-50 md:z-0 h-full transform transition-transform duration-300 ease-in-out md:transform-none " + (sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0") + " w-80 max-w-[85vw] md:w-80 md:max-w-none"}>
-        <Sidebar
-          conversations={conversations}
-          activeConversation={activeConversation}
-          onConversationSelect={handleConversationSelect}
-          onNewConversation={showNewConversationModal}
-        />
-      </div>
-
-      {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col min-w-0 pt-16 md:pt-0">
-        <ChatArea
-          conversation={getCurrentConversation()}
-          onAddMessage={addMessage}
-          onUpdateConversation={updateConversation}
-        />
-      </div>
+    <div className="flex h-screen claude-bg">
+      <Sidebar
+        conversations={conversations}
+        activeConversation={activeConversation}
+        onConversationSelect={setActiveConversation}
+        onNewConversation={showNewConversationModal}
+      />
+      <ChatArea
+        conversation={getCurrentConversation()}
+        onAddMessage={addMessage}
+        onUpdateConversation={updateConversation}
+      />
       
-      {/* Mode Selection Modal */}
       {showModeSelection && (
         <ModeSelection
           onModeSelect={createNewConversation}
