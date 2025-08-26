@@ -6,6 +6,7 @@ import MessageBubble from './MessageBubble'
 import MessageInput from './MessageInput'
 import CurriculumSummary from './CurriculumSummary'
 import TikTokShopSummary from './TikTokShopSummary'
+import GeneralChatSummary from './GeneralChatSummary'
 import { processUnifiedMessage } from '@/lib/unifiedConversationEngine'
 
 interface ChatAreaProps {
@@ -23,11 +24,15 @@ export default function ChatArea({
   const [showSummary, setShowSummary] = useState(false)
 
   const getModeLabel = (mode: string) => {
-    return mode === 'curriculum' ? 'Curriculum' : 'TikTok Shop'
+    if (mode === 'curriculum') return 'Curriculum'
+    if (mode === 'ecom') return 'TikTok Shop'
+    return 'General Chat'
   }
 
   const getModeColor = (mode: string) => {
-    return mode === 'curriculum' ? 'text-blue-600 bg-blue-50 border-blue-200' : 'text-purple-600 bg-purple-50 border-purple-200'
+    if (mode === 'curriculum') return 'text-blue-600 bg-blue-50 border-blue-200'
+    if (mode === 'ecom') return 'text-purple-600 bg-purple-50 border-purple-200'
+    return 'text-green-600 bg-green-50 border-green-200'
   }
 
   const getTitle = (conversation: Conversation) => {
@@ -35,6 +40,8 @@ export default function ChatArea({
       return conversation.data.curriculum?.subject || 'New Curriculum'
     } else if (conversation.mode === 'ecom') {
       return conversation.data.tiktokShop?.businessName || 'New TikTok Shop'
+    } else if (conversation.mode === 'general') {
+      return conversation.data.generalChat?.topic || 'General Chat'
     }
     return conversation.title
   }
@@ -49,6 +56,11 @@ export default function ChatArea({
       const shop = conversation.data.tiktokShop
       if (shop?.niche && shop?.targetAudience) {
         return `${shop.niche} • ${shop.targetAudience}`
+      }
+    } else if (conversation.mode === 'general') {
+      const generalChat = conversation.data.generalChat
+      if (generalChat?.conversationSummary) {
+        return generalChat.conversationSummary.substring(0, 60) + (generalChat.conversationSummary.length > 60 ? '...' : '')
       }
     }
     return null
@@ -104,6 +116,8 @@ export default function ChatArea({
       return <CurriculumSummary curriculum={conversation.data.curriculum} />
     } else if (conversation.mode === 'ecom' && conversation.data.tiktokShop) {
       return <TikTokShopSummary tiktokShop={conversation.data.tiktokShop} />
+    } else if (conversation.mode === 'general' && conversation.data.generalChat) {
+      return <GeneralChatSummary generalChat={conversation.data.generalChat} />
     }
     return null
   }
@@ -113,18 +127,21 @@ export default function ChatArea({
       <div className="flex-1 flex items-center justify-center bg-white dark:bg-gray-900">
         <div className="text-center">
           <div className="flex items-center justify-center gap-4 mb-4">
-            <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-xl flex items-center justify-center">
-              <span className="text-blue-600 dark:text-blue-400 font-semibold">📚</span>
-            </div>
-            <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-xl flex items-center justify-center">
-              <span className="text-purple-600 dark:text-purple-400 font-semibold">🛍️</span>
-            </div>
+          <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-xl flex items-center justify-center">
+          <span className="text-blue-600 dark:text-blue-400 font-semibold">📚</span>
           </div>
+          <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-xl flex items-center justify-center">
+          <span className="text-green-600 dark:text-green-400 font-semibold">💬</span>
+          </div>
+            <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-xl flex items-center justify-center">
+                <span className="text-purple-600 dark:text-purple-400 font-semibold">🛍️</span>
+              </div>
+            </div>
           <h2 className="text-2xl font-semibold text-gray-600 dark:text-gray-300 mb-2">
-            Welcome to Kekoa Chat v2.0
+            Welcome to Kekoa Chat v3.0
           </h2>
           <p className="text-gray-500 dark:text-gray-400">
-            Choose your assistant mode to begin creating
+            Choose your assistant mode: Curriculum, General Chat, or TikTok Shop
           </p>
         </div>
       </div>

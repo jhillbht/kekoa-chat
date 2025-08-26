@@ -1,7 +1,7 @@
 'use client'
 
 import { ConversationMode } from '@/types'
-import { BookOpenIcon, ShoppingBagIcon, SparklesIcon } from '@heroicons/react/24/outline'
+import { BookOpenIcon, ShoppingBagIcon, SparklesIcon, ChatBubbleLeftRightIcon } from '@heroicons/react/24/outline'
 
 interface ModeSelectionProps {
   onModeSelect: (mode: ConversationMode) => void
@@ -42,6 +42,31 @@ export default function ModeSelection({ onModeSelect, onClose }: ModeSelectionPr
                   </span>
                   <span className="inline-block bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs px-2 py-1 rounded-full ml-2">
                     Course Selling
+                  </span>
+                </div>
+              </div>
+            </div>
+          </button>
+
+          <button
+            onClick={() => onModeSelect('general')}
+            className="w-full p-6 border-2 border-gray-200 dark:border-gray-600 rounded-lg hover:border-green-500 hover:bg-green-50 dark:hover:bg-green-900/20 transition-all group"
+          >
+            <div className="flex items-start gap-4">
+              <ChatBubbleLeftRightIcon className="w-8 h-8 text-green-500 group-hover:scale-110 transition-transform" />
+              <div className="text-left">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                  General Chat Assistant
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  Open-ended conversations, brainstorming, Q&A, and general assistance on any topic
+                </p>
+                <div className="mt-2">
+                  <span className="inline-block bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs px-2 py-1 rounded-full">
+                    General AI
+                  </span>
+                  <span className="inline-block bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300 text-xs px-2 py-1 rounded-full ml-2">
+                    Any Topic
                   </span>
                 </div>
               </div>

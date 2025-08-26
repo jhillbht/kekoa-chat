@@ -1,4 +1,4 @@
-import { processUnifiedMessage, getDefaultCurriculumStructure, getDefaultTikTokShopStructure, getInitialMessage, getConversationTitle } from '@/lib/unifiedConversationEngine'
+import { processUnifiedMessage, getDefaultCurriculumStructure, getDefaultTikTokShopStructure, getDefaultGeneralChatStructure, getInitialMessage, getConversationTitle } from '@/lib/unifiedConversationEngine'
 import { ConversationData, Message } from '@/types'
 
 describe('Unified Conversation Engine', () => {
@@ -25,6 +25,22 @@ describe('Unified Conversation Engine', () => {
     expect(result.response).toContain('Perfect!')
   })
 
+  test('should process general chat messages', async () => {
+    const data: ConversationData = {
+      generalChat: getDefaultGeneralChatStructure()
+    }
+
+    const result = await processUnifiedMessage(
+      'I want to talk about artificial intelligence',
+      'general',
+      data,
+      [initialMessage]
+    )
+
+    expect(result.updatedData?.generalChat?.topic).toBeTruthy()
+    expect(result.response).toBeTruthy()
+  })
+
   test('should process TikTok Shop messages', async () => {
     const data: ConversationData = {
       tiktokShop: getDefaultTikTokShopStructure()
@@ -49,6 +65,11 @@ describe('Unified Conversation Engine', () => {
     const tiktokShop = getDefaultTikTokShopStructure()
     expect(tiktokShop.businessName).toBe('')
     expect(tiktokShop.products).toEqual([])
+
+    const generalChat = getDefaultGeneralChatStructure()
+    expect(generalChat.topic).toBe('')
+    expect(generalChat.context).toEqual([])
+    expect(generalChat.keyInsights).toEqual([])
   })
 
   test('should generate correct initial messages', () => {
@@ -59,6 +80,10 @@ describe('Unified Conversation Engine', () => {
     const ecomMessage = getInitialMessage('ecom')
     expect(ecomMessage).toContain('TikTok Shop')
     expect(ecomMessage).toContain('business')
+
+    const generalMessage = getInitialMessage('general')
+    expect(generalMessage).toContain('chat')
+    expect(generalMessage).toContain('anything')
   })
 
   test('should generate appropriate conversation titles', () => {
@@ -93,6 +118,20 @@ describe('Unified Conversation Engine', () => {
 
     const ecomTitle = getConversationTitle('ecom', ecomData)
     expect(ecomTitle).toBe('GlowUp Beauty')
+
+    const generalData: ConversationData = {
+      generalChat: {
+        topic: 'Machine Learning',
+        context: [],
+        preferences: [],
+        conversationSummary: '',
+        keyInsights: [],
+        followUpQuestions: []
+      }
+    }
+
+    const generalTitle = getConversationTitle('general', generalData)
+    expect(generalTitle).toBe('Machine Learning')
   })
 
   test('should handle invalid mode gracefully', async () => {

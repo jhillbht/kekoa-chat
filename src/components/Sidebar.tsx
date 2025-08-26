@@ -1,7 +1,7 @@
 'use client'
 
 import { Conversation } from '@/types'
-import { PlusIcon, BookOpenIcon, ShoppingBagIcon } from '@heroicons/react/24/outline'
+import { PlusIcon, BookOpenIcon, ShoppingBagIcon, ChatBubbleLeftRightIcon } from '@heroicons/react/24/outline'
 
 interface SidebarProps {
   conversations: Conversation[]
@@ -17,15 +17,21 @@ export default function Sidebar({
   onNewConversation
 }: SidebarProps) {
   const getConversationIcon = (mode: string) => {
-    return mode === 'curriculum' ? BookOpenIcon : ShoppingBagIcon
+    if (mode === 'curriculum') return BookOpenIcon
+    if (mode === 'ecom') return ShoppingBagIcon
+    return ChatBubbleLeftRightIcon
   }
 
   const getConversationColor = (mode: string) => {
-    return mode === 'curriculum' ? 'text-blue-500' : 'text-purple-500'
+    if (mode === 'curriculum') return 'text-blue-500'
+    if (mode === 'ecom') return 'text-purple-500'
+    return 'text-green-500'
   }
 
   const getModeLabel = (mode: string) => {
-    return mode === 'curriculum' ? 'Curriculum' : 'TikTok Shop'
+    if (mode === 'curriculum') return 'Curriculum'
+    if (mode === 'ecom') return 'TikTok Shop'
+    return 'General Chat'
   }
 
   const getConversationSubtitle = (conversation: Conversation) => {
@@ -50,6 +56,14 @@ export default function Sidebar({
       }
       if (shop?.targetAudience) {
         return shop.targetAudience
+      }
+    } else if (conversation.mode === 'general') {
+      const generalChat = conversation.data.generalChat
+      if (generalChat?.conversationSummary) {
+        return generalChat.conversationSummary.substring(0, 50) + (generalChat.conversationSummary.length > 50 ? '...' : '')
+      }
+      if (generalChat?.topic && generalChat.topic !== 'General Conversation') {
+        return generalChat.topic
       }
     }
     return getModeLabel(conversation.mode)
@@ -108,6 +122,7 @@ export default function Sidebar({
           <div className="text-center py-12 text-gray-500 dark:text-gray-400">
             <div className="flex items-center justify-center gap-2 mb-4">
               <BookOpenIcon className="w-8 h-8 opacity-50" />
+              <ChatBubbleLeftRightIcon className="w-8 h-8 opacity-50" />
               <ShoppingBagIcon className="w-8 h-8 opacity-50" />
             </div>
             <p className="text-sm">
@@ -120,7 +135,7 @@ export default function Sidebar({
       {/* Footer */}
       <div className="p-4 border-t border-gray-200 dark:border-gray-700">
         <div className="text-xs text-gray-500 dark:text-gray-400 text-center">
-          Kekoa Chat v2.0 • Multi-Mode Assistant
+          Kekoa Chat v3.0 • Triple-Mode Assistant
         </div>
       </div>
     </div>

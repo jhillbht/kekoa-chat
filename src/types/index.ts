@@ -1,4 +1,4 @@
-export type ConversationMode = 'curriculum' | 'ecom'
+export type ConversationMode = 'curriculum' | 'ecom' | 'general'
 
 export interface Message {
   id: string
@@ -70,9 +70,19 @@ export interface TikTokShopStructure {
   competitorAnalysis: string[]
 }
 
+export interface GeneralChatStructure {
+  topic: string
+  context: string[]
+  preferences: string[]
+  conversationSummary: string
+  keyInsights: string[]
+  followUpQuestions: string[]
+}
+
 export interface ConversationData {
   curriculum?: CurriculumStructure
   tiktokShop?: TikTokShopStructure
+  generalChat?: GeneralChatStructure
 }
 
 export interface Conversation {

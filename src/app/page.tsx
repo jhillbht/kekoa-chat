@@ -5,7 +5,7 @@ import Sidebar from '@/components/Sidebar'
 import ChatArea from '@/components/ChatArea'
 import ModeSelection from '@/components/ModeSelection'
 import { Message, Conversation, ConversationMode, ConversationData } from '@/types'
-import { getDefaultCurriculumStructure, getDefaultTikTokShopStructure, getInitialMessage, getConversationTitle } from '@/lib/unifiedConversationEngine'
+import { getDefaultCurriculumStructure, getDefaultTikTokShopStructure, getDefaultGeneralChatStructure, getInitialMessage, getConversationTitle } from '@/lib/unifiedConversationEngine'
 
 export default function Home() {
   const [conversations, setConversations] = useState<Conversation[]>([])
@@ -24,11 +24,13 @@ export default function Home() {
       data.curriculum = getDefaultCurriculumStructure()
     } else if (mode === 'ecom') {
       data.tiktokShop = getDefaultTikTokShopStructure()
+    } else if (mode === 'general') {
+      data.generalChat = getDefaultGeneralChatStructure()
     }
 
     const newConversation: Conversation = {
       id: crypto.randomUUID(),
-      title: mode === 'curriculum' ? 'New Curriculum' : 'New TikTok Shop',
+      title: mode === 'curriculum' ? 'New Curriculum' : mode === 'ecom' ? 'New TikTok Shop' : 'General Chat',
       mode: mode,
       messages: [{
         id: crypto.randomUUID(),
