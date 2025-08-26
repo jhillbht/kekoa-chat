@@ -1,3 +1,5 @@
+export type ConversationMode = 'curriculum' | 'ecom'
+
 export interface Message {
   id: string
   role: 'user' | 'assistant'
@@ -43,13 +45,49 @@ export interface CurriculumStructure {
   assessments: Assessment[]
 }
 
-export interface CurriculumConversation {
+export interface TikTokProduct {
+  id: string
+  name: string
+  description: string
+  price: number
+  category: string
+  targetAudience: string
+  keywords: string[]
+  contentIdeas: string[]
+  hooks: string[]
+  callToActions: string[]
+}
+
+export interface TikTokShopStructure {
+  businessName: string
+  niche: string
+  targetAudience: string
+  products: TikTokProduct[]
+  contentStrategy: string
+  postingSchedule: string
+  marketingGoals: string[]
+  budget: string
+  competitorAnalysis: string[]
+}
+
+export interface ConversationData {
+  curriculum?: CurriculumStructure
+  tiktokShop?: TikTokShopStructure
+}
+
+export interface Conversation {
   id: string
   title: string
+  mode: ConversationMode
   messages: Message[]
-  curriculum: CurriculumStructure
+  data: ConversationData
   createdAt: Date
   updatedAt: Date
+}
+
+// Legacy type for backward compatibility
+export interface CurriculumConversation extends Conversation {
+  curriculum: CurriculumStructure
 }
 
 export interface ConversationFlow {
