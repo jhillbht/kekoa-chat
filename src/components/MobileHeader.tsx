@@ -44,51 +44,54 @@ export default function MobileHeader({
   }
 
   const getMobileTitle = (title: string) => {
-    return title.length > 25 ? title.substring(0, 25) + '...' : title
+    return title.length > 20 ? title.substring(0, 20) + '...' : title
   }
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-30 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-      <div className="flex items-center justify-between px-4 py-3">
+    <header className="w-full bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 safe-area-inset-top">
+      <div className="flex items-center justify-between px-4 py-3 h-14">
+        {/* Left: Hamburger Menu */}
         <button
           onClick={onToggleSidebar}
-          className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors touch-manipulation"
+          className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors touch-manipulation"
+          aria-label="Toggle menu"
         >
           <Bars3Icon className="w-6 h-6 text-gray-600 dark:text-gray-300" />
         </button>
 
-        {conversation ? (
-          <div className="flex items-center gap-2 flex-1 px-3">
-            {(() => {
-              const IconComponent = getConversationIcon(conversation.mode)
-              const iconColor = getConversationColor(conversation.mode)
-              return (
-                <div className="flex items-center gap-2 min-w-0">
-                  <IconComponent className={iconColor + " w-5 h-5 flex-shrink-0"} />
-                  <div className="min-w-0">
+        {/* Center: Current Conversation or App Title */}
+        <div className="flex-1 flex items-center justify-center px-4 min-w-0">
+          {conversation ? (
+            <div className="flex items-center gap-2 min-w-0">
+              {(() => {
+                const IconComponent = getConversationIcon(conversation.mode)
+                const iconColor = getConversationColor(conversation.mode)
+                return (
+                  <>
+                    <IconComponent className={"w-5 h-5 flex-shrink-0 " + iconColor} />
                     <h1 className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">
                       {getMobileTitle(getTitle(conversation))}
                     </h1>
-                  </div>
-                </div>
-              )
-            })()}
-          </div>
-        ) : (
-          <div className="flex-1 text-center">
+                  </>
+                )
+              })()}
+            </div>
+          ) : (
             <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
               Kekoa Chat
             </h1>
-          </div>
-        )}
+          )}
+        </div>
 
+        {/* Right: New Conversation Button */}
         <button
           onClick={onNewConversation}
-          className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors touch-manipulation"
+          className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors touch-manipulation"
+          aria-label="New conversation"
         >
           <PlusIcon className="w-6 h-6 text-gray-600 dark:text-gray-300" />
         </button>
       </div>
-    </div>
+    </header>
   )
 }

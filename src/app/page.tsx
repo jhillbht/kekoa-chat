@@ -48,7 +48,7 @@ export default function Home() {
     setConversations(prev => [newConversation, ...prev])
     setActiveConversation(newConversation.id)
     setShowModeSelection(false)
-    setSidebarOpen(false) // Close sidebar on mobile after selection
+    setSidebarOpen(false)
   }
 
   const updateConversation = (conversationId: string, updates: Partial<Conversation>) => {
@@ -83,18 +83,18 @@ export default function Home() {
 
   const showNewConversationModal = () => {
     setShowModeSelection(true)
-    setSidebarOpen(false) // Close sidebar when opening mode selection
+    setSidebarOpen(false)
   }
 
   const handleConversationSelect = (id: string) => {
     setActiveConversation(id)
-    setSidebarOpen(false) // Close sidebar on mobile after selection
+    setSidebarOpen(false)
   }
 
   return (
-    <div className="flex h-screen relative claude-bg">
-      {/* Mobile Header - Only visible on mobile */}
-      <div className="md:hidden">
+    <div className="flex h-screen bg-white dark:bg-gray-900 overflow-hidden">
+      {/* Mobile Header - ALWAYS show on mobile */}
+      <div className="block md:hidden fixed top-0 left-0 right-0 z-50">
         <MobileHeader 
           conversation={getCurrentConversation()}
           onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
@@ -105,13 +105,13 @@ export default function Home() {
       {/* Sidebar Overlay for Mobile */}
       {sidebarOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
-      {/* Sidebar */}
-      <div className={"fixed md:relative z-50 md:z-0 h-full transform transition-transform duration-300 ease-in-out md:transform-none " + (sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0") + " w-80 max-w-[85vw] md:w-80 md:max-w-none"}>
+      {/* Sidebar - Hidden on mobile unless open */}
+      <div className={"fixed md:relative z-50 md:z-0 h-full w-80 transform transition-transform duration-300 ease-in-out md:transform-none " + (sidebarOpen ? "translate-x-0" : "-translate-x-full") + " md:translate-x-0"}>
         <Sidebar
           conversations={conversations}
           activeConversation={activeConversation}
@@ -120,8 +120,8 @@ export default function Home() {
         />
       </div>
 
-      {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col min-w-0 pt-16 md:pt-0">
+      {/* Main Chat Area - Full width on mobile, sidebar space on desktop */}
+      <div className={"flex-1 flex flex-col min-w-0 " + (sidebarOpen ? "" : "pt-16") + " md:pt-0"}>
         <ChatArea
           conversation={getCurrentConversation()}
           onAddMessage={addMessage}
