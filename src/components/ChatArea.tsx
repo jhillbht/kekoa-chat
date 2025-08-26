@@ -80,15 +80,14 @@ export default function ChatArea({
 
     try {
       const response = await processUnifiedMessage(
+        content.trim(),
         conversation.mode,
-        content,
-        conversation.messages,
-        conversation.data
+        conversation.data,
+        conversation.messages
       )
-
       const assistantMessage: Omit<Message, 'id' | 'timestamp'> = {
         role: 'assistant',
-        content: response.message
+        content: response.response
       }
 
       onAddMessage(conversation.id, assistantMessage)
