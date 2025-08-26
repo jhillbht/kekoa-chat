@@ -229,7 +229,7 @@ export default function ChatArea({
         {/* Chat Area */}
         <div className={"flex-1 flex flex-col min-h-0 " + (showSummary ? "md:flex-1" : "flex-1")}>
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 md:space-y-6">
+          <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 md:space-y-6 pb-28 md:pb-6">
             {conversation.messages.map((message) => (
               <MessageBubble key={message.id} message={message} />
             ))}
@@ -248,7 +248,7 @@ export default function ChatArea({
           </div>
           
           {/* Message Input */}
-          <div className="border-t border-gray-200 dark:border-gray-700 p-4">
+          <div className="sticky md:relative bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 p-4 pb-6 md:pb-4 z-50 md:z-auto mt-auto">
             <MessageInput onSendMessage={handleSendMessage} disabled={isTyping} />
           </div>
         </div>
